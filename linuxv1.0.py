@@ -2,7 +2,7 @@ import subprocess, os
 
 """
 content covered:
-- ufw
+- ufw, lock root
 - passwords
 - services
 """
@@ -22,6 +22,10 @@ if "Firewall is active" in cmd(["sudo", "ufw", "enable"]):
   print("firewall enabled\n")
 else:
   quit("error when enabling ufw")
+
+# lock root
+cmd(["sudo", "passwd", "-ld", "root"])
+print("root has been locked\n")
 
 # change passwords
 weak_users = [] # can be preset
@@ -56,8 +60,12 @@ if len(found) == 0:
   print("no confirmed bad services found")
 else:
   print(f"found services: {found}")
-print("packages finished\n")
+print("services finished\n")
 
 # login.defs here
+if confirm("set login.defs? only run in a vm!"):
+  print("i can't do that yet.\n")
+else:
+  print("login.defs skipped\n")
 
-print("\n== script finished ==\n")
+print("== script finished ==\n")
