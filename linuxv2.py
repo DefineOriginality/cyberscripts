@@ -10,7 +10,8 @@ updates:
 - added ufw checks
 """
 
-all_bad_users = """ # paste users here
+# paste users here
+all_bad_users = """
 
 """
 
