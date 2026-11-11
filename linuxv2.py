@@ -5,6 +5,13 @@ content covered:
 - ufw, lock root
 - passwords
 - services
+updates:
+- made it easier to do users
+- added ufw checks
+"""
+
+all_bad_users = """ # paste users here
+
 """
 
 def cmd(parts):
@@ -15,20 +22,23 @@ def cmd(parts):
 def confirm(prompt="continue?"):
   return (input(f"{prompt} (y/n) ").lower() == "y")
 
-print("\n== running jeffrey's v1.0 script ==\n")
+print("\n== running jeffrey's v2 script ==\n")
 
 # firewall
-if "Firewall is active" in cmd(["sudo", "ufw", "enable"]):
-  print("firewall enabled\n")
-else:
-  quit("error when enabling ufw")
+try:
+  if "Firewall is active" in cmd(["sudo", "ufw", "enable"]):
+    print("firewall enabled\n")
+  else:
+    quit("error when enabling ufw")
+except subprocess.CalledProcessError:
+  print("skipping ufw since it's not installed - try manually?")
 
 # lock root
 cmd(["sudo", "passwd", "-ld", "root"])
 print("root has been locked\n")
 
 # change passwords
-weak_users = [] # can be preset
+weak_users = [x for x in all_bad_users.strip().splitlines() if x]
 if len(weak_users) == 0 and confirm("no users set, add your own?"):
   ans = "null"
   while ans != "":
